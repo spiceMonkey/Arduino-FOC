@@ -19,15 +19,14 @@ The `motor` will output to the serial its status during the initialization `moto
 
 This is an example of the `motor` initialization monitoring output:
 ```sh
-MONITOR: Serial monitor enabled!
-MONITOR: Initialize the motor pins.
-MONITOR: Set high frequency PWM.
-MONITOR: Enabling motor.
-MONITOR: Align the sensor and motor electrical 0 angle.
-MONITOR: Aligning the absolute zero.
-MONITOR: Searching absolute zero.
-MONITOR: Success: Absolute zero found!
-MONITOR: FOC init finished - motor ready.
+MOT: Monitor enabled!
+MOT: Init pins.
+MOT: PWM config.
+MOT: Enable.
+MOT: Align sensor.
+MOT: Absolute zero align.
+MOT: Success!
+MOT: Motor ready.
 ```
 
 To monitor the real-time execution you can use `motor.monitor()` function which will output the motor variables to the serial port. The function outputs different variables relevant to the motion control loops you are running. 
