@@ -17,14 +17,11 @@ Therefore this is an attempt to:
 - Demystify FOC algorithm and make a robust but simple Arduino library: [Arduino <span class="simple">Simple<span class="foc">FOC</span>library</span> ](#arduino-simplefoclibrary)
 - Develop a modular BLDC driver board: [Arduino <span class="simple">Simple<span class="foc">FOC</span>Shiled</span> ](arduino_simplefoc_shield_showcase).
 
+<blockquote class="info"> <p class="heading">NEWS 📢</p> Arduino <span class="simple">Simple<span class="foc">FOC</span>library</span> now supports ESP32 devices! Check out the library <a href="microcontrollers">docs</a>  to see how to use them with your project. You can also find full configuration in the library examples. 
+</blockquote>
 
 <blockquote class="info"> <p class="heading">NEWS 📢</p> Arduino <span class="simple">Simple<span class="foc">FOC</span>library</span> now supports magnetic sensors using I2C communication! Check out the library <a href="sensors">docs</a>  to see how to use them with your project. You can also find full configuration in the library examples. <br>
 <p class="heading">BEWARE 📢</p> The <code class="highlighter-rouge">MagneticSensor</code> class has been renamed and divided to <code class="highlighter-rouge">MagneticSensorSPI</code> and <code class="highlighter-rouge">MagneticSensorI2C</code> classes.
-</blockquote>
-
-
-<blockquote class="info"> <p class="heading">UPDATE 📢</p> Arduino <span class="simple">Simple<span class="foc">FOC</span>library</span> now supports high performance DRV8302 driver boards (60V, 15A, 30$). <a href="https://www.youtube.com/watch?v=RI4nNMF608I">YouTube link</a>.<br>
-You can find the board by clicking on <a href="https://bit.ly/2BZZ5fG">Aliexpress link</a> and the  Arduino code example in the examples folder!
 </blockquote>
 
 ## Arduino <span class="simple">Simple<span class="foc">FOC</span>Shield</span>

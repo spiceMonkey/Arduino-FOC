@@ -14,7 +14,7 @@ Here is a quick guide how to fabricate the <span class="simple">Simple<span clas
 
 ## Fabrication files and schematics
 Download the files by clicking on links:
- - <b><a class="docs_link" href="extras/fabrication/schematic.pdf"  download="simple_foc_shield_schematic"><i class="fa fa-file"></i> Schematics</a></b> - PDF file
+- <b><a class="docs_link" href="extras/fabrication/schematic.pdf"  download="simple_foc_shield_schematic"><i class="fa fa-file"></i> Schematics</a></b> - PDF file
 - <b><a class="docs_link" href="extras/fabrication/Gerber.zip"  download="simple_foc_shield_fabrication"><i class="fa fa-file"></i> Gerber</a></b> - Gerber, NC Drill & Assembly files
 - <b><a class="docs_link" href="extras/fabrication/BOM.xlsx"  download="simple_foc_shield_BOM"><i class="fa fa-file"></i> Bill Of Materials (BOM)</a></b> - Excel sheet
 - <b><a class="docs_link" href="extras/fabrication/3d_model.zip" download="simple_foc_shield_3Dmodel"><i class="fa fa-file"></i> 3D model</a></b> -  3D PDF & STEP file

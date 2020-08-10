@@ -23,8 +23,8 @@ For more info about the features of library releases visit the [github releases 
 - [x] Implement Space Vector Modulation method : PWM SVM
 
 ## MCU support
-- [ ] ESP32 support
 - [ ] Device specific code separation: Easier porting in between devices
+- [x] ESP32 support
 - [x] Device specific: STM32 Nucleo support
 - [x] Device specific: STM32 BLuepill support
 
@@ -35,11 +35,11 @@ For more info about the features of library releases visit the [github releases 
 ## Sensor support
 - [ ] IMU as position sensor
 - [ ] Hall sensor support
-- [ ] Make support for magnetic encoder AS5048 SSI
-- [ ] Make support for magnetic encoder AS5048 PWM
-- [x] Make support for magnetic encoder AS5048 I2C
-- [x] Make support for magnetic encoder AS5048 ABI
-- [x] Make support for magnetic encoder AS5048 SPI
+- [ ] Make support for magnetic encoder  SSI
+- [ ] Make support for magnetic encoder  PWM
+- [x] Make support for magnetic encoder  I2C
+- [x] Make support for magnetic encoder  ABI
+- [x] Make support for magnetic encoder  SPI
 - [x] Encoder index proper implementation
 
 ## User interaction
@@ -56,7 +56,7 @@ For more info about the features of library releases visit the [github releases 
 ## Videos  
 - [ ] VIDEO: Publish a video tutorial for using the library and the samples  
 - [ ] VIDEO: Coding setup and procedure video
-- [ ] VIDEO: Two motors running on HMBGC example
+- [x] VIDEO: Two motors running on HMBGC example
 - [x] VIDEO: Initial video with simple demonstration
 
 

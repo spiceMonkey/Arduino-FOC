@@ -33,7 +33,7 @@ The library is intended both for:
 
 <blockquote class="info">📢 Arduino <span class="simple">Simple<span class="foc">FOC</span>library</span> will support any BLDC motor driver which can be driven with 3 PWM signals.</blockquote>
 <blockquote class="warning">📢
-Up to this moment (<a href="https://github.com/askuric/Arduino-FOC/releases">version 1.4.0 <i class="fa fa-tag"></i></a>) the library doesn't implement the current control loop. The motor torque is controlled via voltage directly. <a href="voltage_torque_control"> More info.</a>
+Up to this moment (<a href="https://github.com/askuric/Arduino-FOC/releases">version 1.4.1 <i class="fa fa-tag"></i></a>) the library doesn't implement the current control loop. The motor torque is controlled via voltage directly. <a href="voltage_torque_control"> More info.</a>
 </blockquote>
 
 
