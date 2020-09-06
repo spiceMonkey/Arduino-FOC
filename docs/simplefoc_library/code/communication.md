@@ -22,13 +22,14 @@ Using this function, user can set the configuration parameters of the motor, tar
 - check all the configuration values 
 
 ## List of motor commands:
-- **P**: velocity PI controller P gain
-- **I**: velocity PI controller I gain
-- **L**: velocity PI controller voltage limit
-- **R**: velocity PI controller voltage ramp
+- **P**: velocity PID controller P gain
+- **I**: velocity PID controller I gain
+- **D**: velocity PID controller D gain
+- **R**: velocity PID controller voltage ramp
 - **F**: velocity Low pass filter time constant
 - **K**: angle P controller P gain
-- **N**: angle P controller velocity limit
+- **N**: global velocity limit
+- **L**: global voltage limit
 - **C**: control loop 
   - **0**: voltage 
   - **1**: velocity 
@@ -162,10 +163,10 @@ void setup() {
   motor.controller = ControlType::voltage;
 
   // controller configuration based on the control type 
-  motor.PI_velocity.P = 0.2;
-  motor.PI_velocity.I = 20;
+  motor.PID_velocity.P = 0.2;
+  motor.PID_velocity.I = 20;
   // default voltage_power_supply
-  motor.PI_velocity.voltage_limit = 12;
+  motor.voltage_limit = 12;
 
   // velocity low pass filtering time constant
   motor.LPF_velocity.Tf = 0.01;
@@ -173,7 +174,7 @@ void setup() {
   // angle loop controller
   motor.P_angle.P = 20;
   // angle loop velocity limit
-  motor.P_angle.velocity_limit = 50;
+  motor.velocity_limit = 50;
 
   // use monitoring with serial for motor init
   // monitoring port

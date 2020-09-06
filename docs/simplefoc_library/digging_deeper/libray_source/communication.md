@@ -32,6 +32,9 @@ Here is the code, and beneath the code see an [example of adding a new command](
 int BLDCMotor::command(String user_command) {
   // error flag
   int errorFlag = 1;
+  // if empty string
+  if(user_command.length() < 1) return errorFlag;
+
   // parse command letter
   char cmd = user_command.charAt(0);
   // check if get command
@@ -39,48 +42,74 @@ int BLDCMotor::command(String user_command) {
   // parse command values
   float value = user_command.substring(1).toFloat();
 
+  // a bit of optimisation of variable memory for Arduino UNO (atmega328)
+  switch(cmd){
+    case 'P':      // velocity P gain change
+    case 'I':      // velocity I gain change
+    case 'D':      // velocity D gain change
+    case 'R':      // velocity voltage ramp change
+      if(monitor_port) monitor_port->print(" PID velocity| ");
+      break;
+    case 'F':      // velocity Tf low pass filter change
+      if(monitor_port) monitor_port->print(" LPF velocity| ");
+      break;
+    case 'K':      // angle loop gain P change
+      if(monitor_port) monitor_port->print(" P angle| ");
+      break;
+    case 'L':      // velocity voltage limit change
+    case 'N':      // angle loop gain velocity_limit change
+      if(monitor_port) monitor_port->print(" Limits| ");
+      break;
+
+  }
+
   // apply the the command
   switch(cmd){
     case 'P':      // velocity P gain change
-      if(monitor_port) monitor_port->print("PI velocity P: ");
-      if(!GET) PI_velocity.P = value;
-      if(monitor_port) monitor_port->println(PI_velocity.P);
+      if(monitor_port) monitor_port->print("P: ");
+      if(!GET) PID_velocity.P = value;
+      if(monitor_port) monitor_port->println(PID_velocity.P);
       break;
     case 'I':      // velocity I gain change
-      if(monitor_port) monitor_port->print("PI velocity I: ");
-      if(!GET) PI_velocity.I = value;
-      if(monitor_port) monitor_port->println(PI_velocity.I);
+      if(monitor_port) monitor_port->print("I: ");
+      if(!GET) PID_velocity.I = value;
+      if(monitor_port) monitor_port->println(PID_velocity.I);
       break;
-    case 'L':      // velocity voltage limit change
-      if(monitor_port) monitor_port->print("PI velocity voltage limit: ");
-      if(!GET)PI_velocity.voltage_limit = value;
-      if(monitor_port) monitor_port->println(PI_velocity.voltage_limit);
+    case 'D':      // velocity D gain change
+      if(monitor_port) monitor_port->print("D: ");
+      if(!GET) PID_velocity.D = value;
+      if(monitor_port) monitor_port->println(PID_velocity.D);
       break;
     case 'R':      // velocity voltage ramp change
-      if(monitor_port) monitor_port->print("PI velocity voltage ramp: ");
-      if(!GET) PI_velocity.voltage_ramp = value;
-      if(monitor_port) monitor_port->println(PI_velocity.voltage_ramp);
+      if(monitor_port) monitor_port->print("volt_ramp: ");
+      if(!GET) PID_velocity.output_ramp = value;
+      if(monitor_port) monitor_port->println(PID_velocity.output_ramp);
+      break;
+    case 'L':      // velocity voltage limit change
+      if(monitor_port) monitor_port->print("volt_limit: ");
+      if(!GET)voltage_limit = value;
+      if(monitor_port) monitor_port->println(voltage_limit);
       break;
     case 'F':      // velocity Tf low pass filter change
-      if(monitor_port) monitor_port->print("LPF velocity time constant: ");
+      if(monitor_port) monitor_port->print("Tf: ");
       if(!GET) LPF_velocity.Tf = value;
       if(monitor_port) monitor_port->println(LPF_velocity.Tf);
       break;
     case 'K':      // angle loop gain P change
-      if(monitor_port) monitor_port->print("P angle P value: ");
+      if(monitor_port) monitor_port->print(" P: ");
       if(!GET) P_angle.P = value;
       if(monitor_port) monitor_port->println(P_angle.P);
       break;
     case 'N':      // angle loop gain velocity_limit change
-      if(monitor_port) monitor_port->print("P angle velocity limit: ");
-      if(!GET) P_angle.velocity_limit = value;
-      if(monitor_port) monitor_port->println(P_angle.velocity_limit);
+      if(monitor_port) monitor_port->print("vel_limit: ");
+      if(!GET) velocity_limit = value;
+      if(monitor_port) monitor_port->println(velocity_limit);
       break;
     case 'C':
       // change control type
-      if(monitor_port) monitor_port->print("Contoller type: ");
+      if(monitor_port) monitor_port->print("Control: ");
       
-      if(GET){ // if get commang
+      if(GET){ // if get command
         switch(controller){
           case ControlType::voltage:
             if(monitor_port) monitor_port->println("voltage");
@@ -91,6 +120,8 @@ int BLDCMotor::command(String user_command) {
           case ControlType::angle:
             if(monitor_port) monitor_port->println("angle");
             break;
+          default:
+            if(monitor_port) monitor_port->println("open loop");
         }
       }else{ // if set command
         switch((int)value){
@@ -141,7 +172,6 @@ int BLDCMotor::command(String user_command) {
   // return 0 if error and 1 if ok
   return errorFlag;
 }
-
 ```
 
 ## Adding a new command example : disable motor - `D`.

@@ -30,9 +30,6 @@ Please see the HMBGC code example (`HMBGC_example.ino`) to test all the function
 - Motor phases `a`,`b` and `c` are connected directly to the driver outputs
 - Motor terminal `M1` uses Arduino pins `9`,`10`,`11` and `M2` uses `3`,`5`,`6`
 
-<blockquote class="info"> <p class="heading">Alignment</p>
-Motor phases <code class="highlighter-rouge">a</code>,<code class="highlighter-rouge">b</code>,<code class="highlighter-rouge">c</code> and encoder channels <code class="highlighter-rouge">A</code> and <code class="highlighter-rouge">B</code> have to have the same orientation for the algorithm to work. But don't worry about it too much. Connect it initially as you wish and then if the motor locks in place reverse phase <code class="highlighter-rouge">a</code> and <code class="highlighter-rouge">b</code> of the motor, that should be enough.
-</blockquote>
 
 
 <blockquote class="danger"> HMBGC board doesn't support magnetic sensors because it doesn't have necessary SPI infrastructure.</blockquote>

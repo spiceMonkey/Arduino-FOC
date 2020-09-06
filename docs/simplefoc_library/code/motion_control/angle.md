@@ -22,18 +22,17 @@ You can test this algorithm by running the example `angle_control.ino`.
 The angle control loop is done by adding one more control loop in cascade on the [velocity control loop](velocity_loop) like showed on the figure above. The loop is closed by using simple P controller. The controller reads the angle <i>a</i> from the motor and determines which velocity <i>v<sub>d</sub></i> the motor should move to reach desire angle <i>a<sub>d</sub></i> set by the user. And then the velocity controller reads the current filtered velocity from the motor <i>v<sub>f</sub></i> and sets the voltage <i>u<sub>q</sub></i> that is needed to reach the velocity <i>v<sub>d</sub></i>, set by the angle loop. 
 
 ## Controller parameters
-To tune this control loop you can set the parameters to both angle P controller and velocity PI controller. 
-``` csharp
+To tune this control loop you can set the parameters to both angle P controller and velocity PID controller. 
+``` cpp
 // controller configuration based on the control type 
-// velocity PI controller parameters
-// default P=0.5 I = 10
-motor.PI_velocity.P = 0.2;
-motor.PI_velocity.I = 20;
-//default voltage_power_supply
-motor.PI_velocity.voltage_limit = 10;
+// velocity PID controller parameters
+// default P=0.5 I = 10 D =0
+motor.PID_velocity.P = 0.2;
+motor.PID_velocity.I = 20;
+motor.PID_velocity.D = 0.001;
 // jerk control using voltage voltage ramp
 // default value is 300 volts per sec  ~ 0.3V per millisecond
-motor.PI_velocity.voltage_ramp = 1000;
+motor.PID_velocity.output_ramp = 1000;
 
 // velocity low pass filtering
 // default 5ms - try different values to see what is the best. 
@@ -43,14 +42,17 @@ motor.LPF_velocity.Tf = 0.01;
 // angle P controller 
 // default P=20
 motor.P_angle.P = 20;
+
 //  maximal velocity of the position control
 // default 20
-motor.P_angle.velocity_limit = 4;
+motor.velocity_limit = 4;
+//default voltage_power_supply
+motor.voltage_limit = 10;
 ```
 It is important to parameter both velocity PI and angle P controller to have the optimal performance.
-The velocity PI controller is parametrized by updating the `motor.PI_velocity` structure as explained before. 
+The velocity PID controller is parametrized by updating the `motor.PID_velocity` structure as explained in [velocity control loop](velocity_loop). 
 - Rough rule should be to lower the proportional gain `P` in order to achieve less vibrations.
-- You probably wont have to touch the `I` value.
+- You probably wont have to touch the `I` or `D` value.
   
 The angle P controller can be updated by changing the `motor.P_angle` structure. 
 - Roughly proportional gain `P` will make it more responsive, but too high value will make it unstable.
@@ -100,22 +102,29 @@ void setup() {
   // controller configuration 
   // default parameters in defaults.h
 
-  // velocity PI controller parameters
-  motor.PI_velocity.P = 0.2;
-  motor.PI_velocity.I = 20;
-  // default voltage_power_supply
-  motor.PI_velocity.voltage_limit = 6;
+  // controller configuration based on the control type 
+  // velocity PID controller parameters
+  // default P=0.5 I = 10 D =0
+  motor.PID_velocity.P = 0.2;
+  motor.PID_velocity.I = 20;
+  motor.PID_velocity.D = 0.001;
   // jerk control using voltage voltage ramp
   // default value is 300 volts per sec  ~ 0.3V per millisecond
-  motor.PI_velocity.voltage_ramp = 1000;
- 
-  // velocity low pass filtering time constant
+  motor.PID_velocity.output_ramp = 1000;
+
+  // velocity low pass filtering
+  // default 5ms - try different values to see what is the best. 
+  // the lower the less filtered
   motor.LPF_velocity.Tf = 0.01;
 
-  // angle P controller
+  // angle P controller -  default P=20
   motor.P_angle.P = 20;
+
   //  maximal velocity of the position control
-  motor.P_angle.velocity_limit = 4;
+  // default 20
+  motor.velocity_limit = 4;
+  // default voltage_power_supply
+  motor.voltage_limit = 10;
 
   // use monitoring with serial 
   Serial.begin(115200);
@@ -162,11 +171,6 @@ void loop() {
   // significantly slowing the execution down!!!!
   motor.monitor();
 }
-
-float changeDirection(float ){
-
-}
-
 ```
 
 

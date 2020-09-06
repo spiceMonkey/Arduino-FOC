@@ -5,19 +5,22 @@ var libraires =[
     "Encoder.h",
     "FOCutils.h",
     "BLDCMotor.h",
+    "HallSensor.h",
     "MagneticSensor.h",
     "MagneticSensorSPI.h",
     "MagneticSensorI2C.h",
+    "MagneticSensorAnalog.h",
     "MySensor.h",
     "Sensor.h"
 ]
 
 var defines =[
     "DEF_POWER_SUPPLY",
-    "DEF_PI_VEL_P",
-    "DEF_PI_VEL_I",
+    "DEF_PID_VEL_P",
+    "DEF_PID_VEL_I",
+    "DEF_PID_VEL_D",
     "DEF_P_ANGLE_P",
-    "DEF_PI_VEL_U_RAMP",
+    "DEF_PID_VEL_U_RAMP",
     "DEF_P_ANGLE_VEL_LIM",
     "DEF_INDEX_SEARCH_TARGET_VELOCITY",
     "DEF_VOLTAGE_SENSOR_ALIGN",
@@ -28,7 +31,7 @@ var defines =[
     "EN_GATE ",
     "M_PWM",
     "M_OC",
-    "OC_ADJ "
+    "OC_ADJ"
 ]
 
 var classNames = [
@@ -37,6 +40,8 @@ var classNames = [
     "MagneticSensor",
     "MagneticSensorSPI",
     "MagneticSensorI2C",
+    "MagneticSensorAnalog",
+    "HallSensor",
     "PciListenerImp",
     "PciManager",
     "Serial",
@@ -44,14 +49,14 @@ var classNames = [
 ];
 
 var classProps = [
-    "PI_velocity",
+    "PID_velocity",
     "P_angle",
     "LPF_velocity",
-    "PI_velocity_index_search",
     "P",
     "I",
     "Tf",
-    "voltage_ramp",
+    "D",
+    "output_ramp",
     "quadrature",
     "pullup",
     "voltage_limit",
@@ -68,6 +73,7 @@ var funcNames = [
     "handleA",
     "handleB",
     "handleIndex",
+    "handleC",
     "registerListener",
     "linkSensor",
     "useMonitoring",
@@ -100,12 +106,13 @@ var funcNames = [
     "_cos",
     "setPwm",
     "positionP",
-    "velocityPI",
-    "controllerPI",
+    "velocityPID",
+    "controllerPID",
     "serialReceiveUserCommand",
     "disable",
     "pinMode",
-    "digitalWrite"
+    "digitalWrite",
+    "constrain"
 
 ];
 var structNames = [
@@ -121,6 +128,8 @@ var structProps = [
     "DISABLE",
     "angle",
     "velocity",
+    "angle_openloop",
+    "velocity_openloop",
     "voltage",
     "SpaceVectorPWM",
     "SinePWM"

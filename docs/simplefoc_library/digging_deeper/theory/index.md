@@ -36,8 +36,8 @@ This is the section intended to explain some interesting theoretical features of
     </div>
     <div>
         <a href="pi_controller">
-            <h3 style="color:inherit"> <i class="fa fa-lg fa-graduation-cap" style="padding:10px"></i> PI controller theory</h3>
+            <h3 style="color:inherit"> <i class="fa fa-lg fa-graduation-cap" style="padding:10px"></i> PID controller theory</h3>
         </a>
-        <p> PI controller differential equation and implementation details.</p>
+        <p> PID controller differential equation and implementation details.</p>
     </div>
 <div>

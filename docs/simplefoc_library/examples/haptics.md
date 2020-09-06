@@ -166,7 +166,7 @@ Additionally we introduce a bit higher degree of filtering by augmenting `Tf` va
 // augment filtering
 motor2.LPF_velocity.Tf = 0.02;
 // rise I gain
-motor2.PI_velocity.I = 40;
+motor2.PID_velocity.I = 40;
 ```
 And to finish the `setup()` we just initialize the motors and FOC algorithm.
 
@@ -219,7 +219,7 @@ void setup() {
   motor2.controller = ControlType::velocity;
 
   motor2.LPF_velocity.Tf = 0.02;
-  motor2.PI_velocity.I = 40;
+  motor2.PID_velocity.I = 40;
 
   // use monitoring with serial for motor init
   // monitoring port

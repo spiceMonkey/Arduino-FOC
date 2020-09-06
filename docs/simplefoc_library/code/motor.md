@@ -21,7 +21,7 @@ It implements:
 - Monitoring
 - User communication interface
 
-## Step 1. Hardware setups
+## Step 1. Hardware setup
 To initialize the hardware of the BLDC motor and BLDC driver you need to specify the `pwm` pin numbers, number of `pole pairs` of the motor and optionally `enable` pin.
 ```cpp
 //  BLDCMotor( int phA, int phB, int phC, int pp, int en)
@@ -40,10 +40,8 @@ When you have your `motor` defined you can start the configuration.
 Once when you have the `motor` defined and the sensor initialized you need to link the `motor` and the `sensor` by executing:    
 ```cpp
 // link the motor to the sensor
-// either Encoder class, MagneticSensorSPI class or MagneticSensorI2C class
 motor.linkSensor(&sensor);
 ```
-
 
 ## Step 3. Configuration
 
@@ -83,10 +81,14 @@ For more information about the theory of these approaches please and source code
 
 ### Step 3.2 Motion control parameters  
 
-There are 3 different control strategies implemented in the Arduino <span class="simple">Simple<span class="foc">FOC</span>library</span>: 
+There are 3 different closed loop control strategies implemented in the Arduino <span class="simple">Simple<span class="foc">FOC</span>library</span>: 
 - [torque control loop using voltage](voltage_loop)
 - [position/angle motion control](angle_loop)
 - [velocity motion control](velocity_loop)
+
+Additionally <span class="simple">Simple<span class="foc">FOC</span>library</span> implements two open loop control strategies as well:
+- [position open-loop control](angle_openloop)
+- [velocity open-loop control](velocity_openloop)
 
 You set it by changing the `motor.controller` variable. 
 ```cpp
@@ -94,6 +96,8 @@ You set it by changing the `motor.controller` variable.
 // ControlType::voltage     - torque control loop using voltage
 // ControlType::velocity    - velocity motion control
 // ControlType::angle       - position/angle motion control
+// ControlType::velocity_openloop    - velocity open-loop control
+// ControlType::angle_openloop       - position open-loop control
 motor.controller = ControlType::angle;
 ```
 <blockquote class="warning"><p class="heading"> Important!</p>This parameter doesn't have a default value and it has to be set before real-time execution starts.</blockquote>
@@ -112,20 +116,20 @@ motor.velocity_index_search = 3;
 motor.controller = ControlType::voltage;
 
 // controller configuration based on the control type 
-motor.PI_velocity.P = 0.2;
-motor.PI_velocity.I = 20;
-// default voltage_power_supply
-motor.PI_velocity.voltage_limit = 12;
-// default value 1000 V/s
-motor.PI_velocity.voltage_ramp = 500;
+motor.PID_velocity.P = 0.2;
+motor.PID_velocity.I = 20;
+motor.PID_velocity.D = 0.001;
 
 // velocity low pass filtering time constant
 motor.LPF_velocity.Tf = 0.01;
 
 // angle loop controller
 motor.P_angle.P = 20;
+
 // angle loop velocity limit
-motor.P_angle.velocity_limit = 50;
+motor.velocity_limit = 50;
+// default voltage_power_supply
+motor.voltage_limit = 12;
 ```
 
 Finally the configuration is terminated by running `init()` function which prepares all the hardware and software motor components using the configured values.
@@ -138,10 +142,18 @@ motor.init();
 
 After the motor and sensor are initialized and configured, and before we can start the motion control we need to initialize the FOC algorithm. 
 ```cpp
-// align encoder and start FOC
+// align sensor and start FOC
 motor.initFOC();
 ```
 This function aligns sensor and motor zero positions and initializes FOC variables. It is intended to be run in the `setup` function of the Arduino. After the call of this function FOC is ready and our setup is done! 
+
+If you are using absolute sensors such as magnetic sensors, in the `initFOC()` you can provide the sensor offset `zero_electric_offset` and sensor direction `sensor_direction` to avoid alignment procedure:
+```cpp
+// align sensor and start FOC
+//motor.initFOC(zero_electric_offset, sensor_direction);
+motor.initFOC(2.15, Direction::CW);
+```
+You can find these values by running the `find_sensor_offset_and_direction.ino` example.
 
 For more info about what really happens in `initFOC()` check the [FOC source code implementation](foc_implementation).
 
@@ -171,7 +183,6 @@ The faster you can run this function the better!
 </ul>
 </blockquote>
 
-
 Finally, when we can set the phase voltages to the motor using the FOC algorithm we can proceed to the motion control. And this is done with `motor.move()` function.
 
 ```cpp
@@ -186,8 +197,8 @@ motor.move(target);
 The `move()` method executes the control loops of the algorithm. If is governed by the `motor.controller` variable. It executes either pure voltage loop, velocity loop or angle loop.
 
 It receives one parameter `float target` which is current user defined target value.
-- If the user runs [velocity loop](velocity_loop), `move` function will interpret `target` as the target velocity <i>v<sub>d</sub></i>.
-- If the user runs [angle loop](angle_loop), `move` will interpret `target` parameter as the target angle <i>a<sub>d</sub></i>. 
+- If the user runs [velocity loop](velocity_loop) or [velocity open-loop](velocity_openloop), `move` function will interpret `target` as the target velocity <i>v<sub>d</sub></i>.
+- If the user runs [angle loop](angle_loop) or [angle open-loop](angle_openloop), `move` will interpret `target` parameter as the target angle <i>a<sub>d</sub></i>. 
 - If the user runs the [voltage loop](voltage_loop), `move` function will interpret the `target` parameter as voltage <i>u<sub>d</sub></i>.
 
  The `target` parameter is optional and if it is not set, the target value will be set by the public motor variable `motor.target`. The equivalent code would be:

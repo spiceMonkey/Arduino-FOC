@@ -11,7 +11,7 @@ grand_parent: Arduino <span class="simple">Simple<span class="foc">FOC</span>lib
 ---
 
 # Position Sensors 
-This library supports *off-the-shelf* two types of position sensors: 
+This library supports *off-the-shelf* these types of position sensors: 
 - [Encoder](encoder): 
     - Sensor that counts `A`, `B` and `index` channels impulses to estimate the position.
     - Examples: 
@@ -21,26 +21,36 @@ This library supports *off-the-shelf* two types of position sensors:
 - [Magnetic sensor](magnetic_sensor): 
     - Sensor that uses precise magnetic field measurement to estimate the position.
         - They come with multitude of different communication standards such as: SPI, SSI, I2C, ABI, UVW, PWM...
-        - **Supported communications:** ([version 1.4.1 <i class="fa fa-tag"></i>](https://github.com/askuric/Arduino-FOC/releases)) 
-            - SPI 
-            - I2C 
+        - **Supported communications:** ([releases <i class="fa fa-tag"></i>](https://github.com/askuric/Arduino-FOC/releases)) 
+            - SPI, I2C, Analog
+            - UVW (*using the hall sensor interface*)
             - ABI (*using the encoder interface*)
     - Examples :  [AS5048A <i class="fa fa-external-link"></i>](https://www.ebay.com/itm/AS5048-Magnetic-Encoder-PWM-SPI-Interface-14-Bit-Precision-For-Brushless-Motor/153636871434?hash=item23c5789d0a:g:oOMAAOSwd-5ddaWQ), [AS5047U <i class="fa fa-external-link"></i>](https://www.mouser.fr/ProductDetail/ams/AS5X47U-TS_EK_AB?qs=sGAEpiMZZMve4%2FbfQkoj%252BBDLPCj82ZLyYIPEtADg0FE%3D), [AS5600 <i class="fa fa-external-link"></i>](https://www.ebay.com/itm/1PC-New-AS5600-magnetic-encoder-sensor-module-12bit-high-precision/303401254431?hash=item46a41fbe1f:g:nVwAAOSwTJJd8zRK)
+- [Hall sensors](hall_sensors): 
+    - Sensor that estimates rotor position by reading magnet positions on the rotor.
+    - Examples :  [49E Hall sonde <i class="fa fa-external-link"></i>](https://fr.aliexpress.com/item/32590021901.html?spm=a2g0o.productlist.0.0.6eec671cZA32JT&algo_pvid=5729f98b-72a0-4cf8-b80a-adac9ecbbd2a&algo_expid=5729f98b-72a0-4cf8-b80a-adac9ecbbd2a-58&btsid=0b8b035915993735716435630eb78b&ws_ab_test=searchweb0_0,searchweb201602_,searchweb201603_) ,   [105 Hall sensor <i class="fa fa-external-link"></i>](https://fr.aliexpress.com/item/32968973849.html?spm=a2g0o.productlist.0.0.2727671c1QF3Xc&algo_pvid=701cd77d-e484-49ca-8ee8-35a76ed246a1&algo_expid=701cd77d-e484-49ca-8ee8-35a76ed246a1-12&btsid=0b8b034e15993753711202685ed51b&ws_ab_test=searchweb0_0,searchweb201602_,searchweb201603_) 
 
 Both classes of sensors are implemented in generic way in order to support as many of their versions as possible.
 
-<div class="image_icon width40" >
+<div class="image_icon width30" >
     <a href="encoder" class="text-center">
         <img src="extras/Images/enc0.jpg" style="width:32%;display:inline"><img src="extras/Images/enc.jpg" style="width:32%;display:inline"><img src="extras/Images/enc1.png" style="width:32%;display:inline">
         <i class="fa fa-external-link-square fa-2x"></i>
         <p >Encoders</p>
     </a>
 </div>
-<div class="image_icon width40" >
+<div class="image_icon width30" >
     <a href="magnetic_sensor" class="text-center">
         <img src="extras/Images/mag0.jpg" style="width:32%;display:inline"><img src="extras/Images/mag2.jpg" style="width:32%;display:inline"><img src="extras/Images/mag.jpg" style="width:32%;display:inline">
         <i class="fa fa-external-link-square fa-2x"></i>
         <p >Magnetic sensors</p>
+    </a>
+</div>
+<div class="image_icon width30" >
+    <a href="hall_sensors" class="text-center">
+        <img src="extras/Images/hall_schema.jpg" style="width:48.5%;display:inline"><img src="extras/Images/hall.png" style="width:48.5%;display:inline">
+        <i class="fa fa-external-link-square fa-2x"></i>
+        <p >Hall sensors</p>
     </a>
 </div>
 

@@ -55,3 +55,16 @@ For a bit more information about the choice of motors visit <a href="bldc_motors
 
 <img src="extras/Images/foc_shield_v13_magI2C.png" class="">
 
+
+## Magnetic sensor Analog output
+- Magnetic sensor's Analog output is connected directly to any analog input pin, on a figure below we use `A0`
+  - If the application requires more than one sensor each of them is connected to one of the analog input pins.
+
+<img src="extras/Images/foc_shield_v13_analog.png" class="">
+
+
+## Hall sensors
+- Channels `A`, `B` and `C` ( `U`, `V` and `W` ) are connected to the encoder connector `P_ENC`. 
+
+<img src="extras/Images/foc_shield_v13_hall.png" class="">
+

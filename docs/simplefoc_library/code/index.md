@@ -28,9 +28,10 @@ The quotation marks `" "` are used when the header files are in the same directo
 ## Step 1. <a href="sensors" class="remove_dec">Position sensor setup</a>
 
 First step when writing the code is initializing and configuring the position sensor.
-The library supports two types of position sensors:
+The library supports these position sensors:
  - [Encoders](encoder): Optical, Capacitive, Magnetic encoders (ABI)
- - [Magnetic sensors](magnetic_sensor): SPI or I2C communication
+ - [Magnetic sensors](magnetic_sensor): SPI, I2C or Analog
+ - [Hall sensors](hall_sensors): 3xHall sonde, Magnetic sensor (UVW interface) 
 
 Choose position sensor to use with this example:
 
@@ -65,10 +66,6 @@ void loop() {
 // SPI example
 // MagneticSensorSPI(int cs, float bit_resolution, int angle_register)
 MagneticSensorSPI sensor = MagneticSensorSPI(10, 14, 0x3FFF);
-
-// I2C example
-// MagneticSensorI2C(uint8_t _chip_address, float _cpr, uint8_t _angle_register_msb)
-MagneticSensorI2C sensor = MagneticSensorI2C(0x36, 12, 0x0E, 4);
 
 void setup() {
   // initialize magnetic sensor hardware
@@ -386,10 +383,11 @@ This is the code of the library example `motor_full_control_serial_examples/magn
   <span class="n">motor</span><span class="p">.</span><span class="n">controller</span> <span class="o">=</span> <span class="n">ControlType</span><span class="o">::</span><span class="n">voltage</span><span class="p">;</span>
 
   <span class="c1">// controller configuration based on the control type </span>
-  <span class="n">motor</span><span class="p">.</span><span class="n">PI_velocity</span><span class="p">.</span><span class="n">P</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">;</span>
-  <span class="n">motor</span><span class="p">.</span><span class="n">PI_velocity</span><span class="p">.</span><span class="n">I</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+  <span class="n">motor</span><span class="p">.</span><span class="n">PID_velocity</span><span class="p">.</span><span class="n">P</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">;</span>
+  <span class="n">motor</span><span class="p">.</span><span class="n">PID_velocity</span><span class="p">.</span><span class="n">I</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
+  <span class="n">motor</span><span class="p">.</span><span class="n">PID_velocity</span><span class="p">.</span><span class="n">D</span> <span class="o">=</span> <span class="mi">0.001</span><span class="p">;</span>
   <span class="c1">// default voltage_power_supply</span>
-  <span class="n">motor</span><span class="p">.</span><span class="n">PI_velocity</span><span class="p">.</span><span class="n">voltage_limit</span> <span class="o">=</span> <span class="mi">12</span><span class="p">;</span>
+  <span class="n">motor</span><span class="p">.</span><span class="n">voltage_limit</span> <span class="o">=</span> <span class="mi">12</span><span class="p">;</span>
 
   <span class="c1">// velocity low pass filtering time constant</span>
   <span class="n">motor</span><span class="p">.</span><span class="n">LPF_velocity</span><span class="p">.</span><span class="n">Tf</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">;</span>
@@ -397,7 +395,7 @@ This is the code of the library example `motor_full_control_serial_examples/magn
   <span class="c1">// angle loop controller</span>
   <span class="n">motor</span><span class="p">.</span><span class="n">P_angle</span><span class="p">.</span><span class="n">P</span> <span class="o">=</span> <span class="mi">20</span><span class="p">;</span>
   <span class="c1">// angle loop velocity limit</span>
-  <span class="n">motor</span><span class="p">.</span><span class="n">P_angle</span><span class="p">.</span><span class="n">velocity_limit</span> <span class="o">=</span> <span class="mi">50</span><span class="p"></span>
+  <span class="n">motor</span><span class="p">.</span><span class="n">velocity_limit</span> <span class="o">=</span> <span class="mi">50</span><span class="p"></span>
 </span><span class="com_s mon_s">
   <span class="c1">// use monitoring with serial for motor init</span>
   <span class="c1">// monitoring port</span>

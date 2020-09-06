@@ -39,12 +39,6 @@ motor.foc_modulation = FOCModulationType::SpaceVectorPWM;
 
 The two modulation types and phase voltage calculation is fully implemented in the `setPhaseVoltage()` function. Here's how it looks.
 ```cpp
-// Method using FOC to set Uq to the motor at the optimal angle
-// Function implementing Space Vector PWM and Sine PWM algorithms
-// 
-// Function using sine approximation
-// regular sin + cos ~300us    (no memory usage)
-// approx  _sin + _cos ~110us  (400Byte ~ 20% of memory)
 void BLDCMotor::setPhaseVoltage(float Uq, float angle_el) {
   switch (foc_modulation)
   {
@@ -74,20 +68,20 @@ void BLDCMotor::setPhaseVoltage(float Uq, float angle_el) {
       if(Uq < 0) angle_el += _PI;
       Uq = abs(Uq);
 
-      // angle normalization in between 0 and 2pi
+      // angle normalisation in between 0 and 2pi
       // only necessary if using _sin and _cos - approximation functions
       angle_el = normalizeAngle(angle_el + zero_electric_angle + _PI_2);
 
       // find the sector we are in currently
       int sector = floor(angle_el / _PI_3) + 1;
       // calculate the duty cycles
-      float T1 = _SQRT3*_sin(sector*_PI_3 - angle_el);
-      float T2 = _SQRT3*_sin(angle_el - (sector-1.0)*_PI_3);
+      float T1 = _SQRT3*_sin(sector*_PI_3 - angle_el) * Uq/voltage_power_supply;
+      float T2 = _SQRT3*_sin(angle_el - (sector-1.0)*_PI_3) * Uq/voltage_power_supply;
       // two versions possible 
       // centered around voltage_power_supply/2
       float T0 = 1 - T1 - T2;
       // pulled to 0 - better for low power supply voltage
-      //T0 = 0;
+      //float T0 = 0;
 
       // calculate the duty cycles(times)
       float Ta,Tb,Tc; 
@@ -129,17 +123,15 @@ void BLDCMotor::setPhaseVoltage(float Uq, float angle_el) {
           Tc = 0;
       }
 
-      // calculate the phase voltages
-      Ua = Ta*Uq;
-      Ub = Tb*Uq;
-      Uc = Tc*Uq;
+      // calculate the phase voltages and center
+      Ua = Ta*voltage_power_supply;
+      Ub = Tb*voltage_power_supply;
+      Uc = Tc*voltage_power_supply;
       break;
   }
   
   // set the voltages in hardware
-  setPwm(pwmA, Ua);
-  setPwm(pwmB, Ub);
-  setPwm(pwmC, Uc);
+  setPwm(Ua, Ub, Uc);
 }
 ```
 
@@ -155,14 +147,28 @@ The procedure is explained on following diagram.
 This all happens when we call `initFOC()` function.
 ```cpp
 // Function initializing FOC algorithm
-// and aligning sensor's and motors' zero position   
-int  BLDCMotor::initFOC() {
-  // sensor and motor alignment
-  _delay(500);
-  int exit_flag = alignSensor();
-  _delay(500);
-  
-  if(monitor_port) monitor_port->println("MONITOR: FOC init finished - motor ready.");
+// and aligning sensor's and motors' zero position 
+// - If zero_electric_offset parameter is set the alignment procedure is skipped
+//
+// - zero_electric_offset  - value of the sensors absolute position electrical offset in respect to motor's electrical 0 position.
+// - sensor_direction      - sensor natural direction - default is CW
+//  
+int  BLDCMotor::initFOC( float zero_electric_offset = NOT_SET , Direction sensor_direction = Direction::CW) {
+  int exit_flag = 1;
+  // align motor if necessary
+  // alignment necessary for encoders!
+  if(zero_electric_offset != NOT_SET){
+    // absolute zero offset provided - no need to align
+    zero_electric_angle = zero_electric_offset;
+    // set the sensor direction - default CW
+    sensor->natural_direction = sensor_direction;
+  }else{
+    // sensor and motor alignment
+    _delay(500);
+    exit_flag = alignSensor();
+    _delay(500);
+    }
+  if(monitor_port) monitor_port->println("MOT: Motor ready.");
 
   return exit_flag;
 }
@@ -172,12 +178,31 @@ The initial motor and sensor angle alignment is implemented in the `alignSensor(
 ```cpp
 // Encoder alignment to electrical 0 angle
 int BLDCMotor::alignSensor() {
-  if(monitor_port) monitor_port->println("MONITOR: Align the sensor's and motor electrical 0 angle.");
+  if(monitor_port) monitor_port->println("MOT: Align sensor.");
+  
   // align the electrical phases of the motor and sensor
+  float start_angle = shaftAngle();
+  for (int i = 0; i <=5; i++ ) {
+    float angle = _3PI_2 + _2PI * i / 6.0;
+    setPhaseVoltage(voltage_sensor_align,  angle);
+    _delay(200);
+  }
+  float mid_angle = shaftAngle();
+  for (int i = 5; i >=0; i-- ) {
+    float angle = _3PI_2 + _2PI * i / 6.0;
+    setPhaseVoltage(voltage_sensor_align,  angle);
+    _delay(200);
+  }
+  if (mid_angle < start_angle) {
+    if(monitor_port) monitor_port->println("MOT: natural_direction==CCW");
+    sensor->natural_direction = Direction::CCW;
+  } else if (mid_angle == start_angle) {
+    if(monitor_port) monitor_port->println("MOT: Sensor failed to notice movement");
+  }
+
   // set angle -90 degrees 
-  setPhaseVoltage(voltage_sensor_align, _3PI_2);
-  // let the motor stabilize for 3 sec
-  _delay(3000);
+  // let the motor stabilize for 2 sec
+  _delay(2000);
   // set sensor to zero
   sensor->initRelativeZero();
   _delay(500);
@@ -188,9 +213,9 @@ int BLDCMotor::alignSensor() {
   int exit_flag = absoluteZeroAlign();
   _delay(500);
   if(monitor_port){
-    if(exit_flag< 0 ) monitor_port->println("MONITOR: Error: Absolute zero not found!");
-    if(exit_flag> 0 ) monitor_port->println("MONITOR: Success: Absolute zero found!");
-    else  monitor_port->println("MONITOR: Absolute zero not available!");
+    if(exit_flag< 0 ) monitor_port->println("MOT: Error: Not found!");
+    if(exit_flag> 0 ) monitor_port->println("MOT: Success!");
+    else  monitor_port->println("MOT: Not available!");
   }
   return exit_flag;
 }
@@ -201,16 +226,17 @@ While the absolute angle alignment is implemented in the function `absoluteZeroA
 // Encoder alignment the absolute zero angle 
 // - to the index
 int BLDCMotor::absoluteZeroAlign() {
-  // if no absolute zero return
+  
+  if(monitor_port) monitor_port->println("MOT: Absolute zero align.");
+    // if no absolute zero return
   if(!sensor->hasAbsoluteZero()) return 0;
   
-  if(monitor_port) monitor_port->println("MONITOR: Aligning the absolute zero.");
 
-  if(monitor_port && sensor->needsAbsoluteZeroSearch()) monitor_port->println("MONITOR: Searching for absolute zero.");
+  if(monitor_port && sensor->needsAbsoluteZeroSearch()) monitor_port->println("MOT: Searching...");
   // search the absolute zero with small velocity
   while(sensor->needsAbsoluteZeroSearch() && shaft_angle < _2PI){
     loopFOC();   
-    voltage_q = velocityPI(velocity_index_search - shaftVelocity());
+    voltage_q = velocityPID(velocity_index_search - shaftVelocity());
   }
   voltage_q = 0;
   // disable motor
@@ -221,7 +247,7 @@ int BLDCMotor::absoluteZeroAlign() {
     // align the sensor with the absolute zero
     float zero_offset = sensor->initAbsoluteZero();
     // remember zero electric angle
-    zero_electric_angle = electricAngle(zero_offset);
+    zero_electric_angle = normalizeAngle(electricAngle(zero_offset));
   }
   // return bool if zero found
   return !sensor->needsAbsoluteZeroSearch() ? 1 : -1;

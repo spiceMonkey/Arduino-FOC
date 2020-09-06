@@ -29,9 +29,6 @@ For more information about the <span class="simple">Simple<span class="foc">FOC<
 ## Motor
 - Motor phases `a`, `b` and `c` are connected directly the motor terminal connector `TB_M1`
 
-<blockquote class="info"> <p class="heading">Alignment</p>
-Motor phases <code class="highlighter-rouge">a</code>,<code class="highlighter-rouge">b</code>,<code class="highlighter-rouge">c</code> and encoder channels <code class="highlighter-rouge">A</code> and <code class="highlighter-rouge">B</code> have to have the same orientation for the algorithm to work. But don't worry about it too much. Connect it initially as you wish and then if the motor locks in place reverse phase <code class="highlighter-rouge">a</code> and <code class="highlighter-rouge">b</code> of the motor, that should be enough.
-</blockquote>
 
 ### Small motivation :D
 <p><img src="extras/Images/simple_foc_shield_v13_small.gif" class="width60"></p>
@@ -98,13 +95,14 @@ Now we configure the velocity PI controller parameters
 ```cpp
 // velocity PI controller parameters
 // default P=0.5 I = 10
-motor.PI_velocity.P = 0.2;
-motor.PI_velocity.I = 20;
-//default voltage_power_supply/2
-motor.PI_velocity.voltage_limit = 6;
+motor.PID_velocity.P = 0.2;
+motor.PID_velocity.I = 20;
 // jerk control using voltage voltage ramp
 // default value is 300 volts per sec  ~ 0.3V per millisecond
-motor.PI_velocity.voltage_ramp = 1000;
+motor.PID_velocity.output_ramp = 1000;
+
+//default voltage_power_supply
+motor.voltage_limit = 6;
 ```
 Additionally we can configure the Low pass filter time constant `Tf`
 ```cpp
@@ -120,7 +118,7 @@ Finally we configure position P controller gain and the velocity limit variable.
 motor.P_angle.P = 20;
 //  maximal velocity of the position control
 // default 20
-motor.P_angle.velocity_limit = 4;
+motor.velocity_limit = 4;
 ```
 <blockquote class="info">For more information about the angle control loop parameters please check the  <a href="angle_loop">doc</a>.</blockquote>
 
@@ -181,14 +179,15 @@ void setup() {
   // controller configuration based on the control type 
   // velocity PI controller parameters
   // default P=0.5 I = 10
-  motor.PI_velocity.P = 0.2;
-  motor.PI_velocity.I = 20;
-  //default voltage_power_supply/2
-  motor.PI_velocity.voltage_limit = 6;
+  motor.PID_velocity.P = 0.2;
+  motor.PID_velocity.I = 20;
   // jerk control using voltage voltage ramp
   // default value is 300 volts per sec  ~ 0.3V per millisecond
-  motor.PI_velocity.voltage_ramp = 1000;
+  motor.PID_velocity.output_ramp = 1000;
   
+  //default voltage_power_supply
+  motor.voltage_limit = 6;
+
   // velocity low pass filtering
   // default 5ms - try different values to see what is the best. 
   // the lower the less filtered
@@ -199,7 +198,7 @@ void setup() {
   motor.P_angle.P = 20;
   //  maximal velocity of the position control
   // default 20
-  motor.P_angle.velocity_limit = 4;
+  motor.velocity_limit = 4;
   
   // initialize motor
   motor.init();

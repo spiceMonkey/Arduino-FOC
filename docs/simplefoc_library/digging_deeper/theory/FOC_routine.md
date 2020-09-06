@@ -75,9 +75,7 @@ void BLDCMotor::setPhaseVoltage(float Uq, float angle_el) {
     Uc = -0.5 * Ualpha - _SQRT3_2 * Ubeta + voltage_power_supply/2;
 
     // set the voltages in hardware
-    setPwm(pwmA, Ua);
-    setPwm(pwmB, Ub);
-    setPwm(pwmC, Uc);
+    setPwm(Ua, Ub, Uc);
 }
 ```
 
@@ -120,20 +118,20 @@ void BLDCMotor::setPhaseVoltage(float Uq, float angle_el) {
     if(Uq < 0) angle_el += _PI;
     Uq = abs(Uq);
 
-    // angle normalization in between 0 and 2pi
+    // angle normalisation in between 0 and 2pi
     // only necessary if using _sin and _cos - approximation functions
     angle_el = normalizeAngle(angle_el + zero_electric_angle + _PI_2);
 
     // find the sector we are in currently
     int sector = floor(angle_el / _PI_3) + 1;
     // calculate the duty cycles
-    float T1 = _SQRT3*_sin(sector*_PI_3 - angle_el);
-    float T2 = _SQRT3*_sin(angle_el - (sector-1.0)*_PI_3);
+    float T1 = _SQRT3*_sin(sector*_PI_3 - angle_el) * Uq/voltage_power_supply;
+    float T2 = _SQRT3*_sin(angle_el - (sector-1.0)*_PI_3) * Uq/voltage_power_supply;
     // two versions possible 
     // centered around voltage_power_supply/2
     float T0 = 1 - T1 - T2;
     // pulled to 0 - better for low power supply voltage
-    //T0 = 0;
+    //float T0 = 0;
 
     // calculate the duty cycles(times)
     float Ta,Tb,Tc; 
@@ -176,14 +174,12 @@ void BLDCMotor::setPhaseVoltage(float Uq, float angle_el) {
     }
 
     // calculate the phase voltages
-    Ua = Ta*Uq;
-    Ub = Tb*Uq;
-    Uc = Tc*Uq;
+    Ua = Ta*voltage_power_supply;
+    Ub = Tb*voltage_power_supply;
+    Uc = Tc*voltage_power_supply;
 
     // set the voltages in hardware
-    setPwm(pwmA, Ua);
-    setPwm(pwmB, Ub);
-    setPwm(pwmC, Uc);
+    setPwm(Ua, Ub, Uc);
 }
 ```
 

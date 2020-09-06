@@ -17,11 +17,18 @@ Therefore this is an attempt to:
 - Demystify FOC algorithm and make a robust but simple Arduino library: [Arduino <span class="simple">Simple<span class="foc">FOC</span>library</span> ](#arduino-simplefoclibrary)
 - Develop a modular BLDC driver board: [Arduino <span class="simple">Simple<span class="foc">FOC</span>Shiled</span> ](arduino_simplefoc_shield_showcase).
 
-<blockquote class="info"> <p class="heading">NEWS 📢</p> Arduino <span class="simple">Simple<span class="foc">FOC</span>library</span> now supports ESP32 devices! Check out the library <a href="microcontrollers">docs</a>  to see how to use them with your project. You can also find full configuration in the library examples. 
-</blockquote>
-
-<blockquote class="info"> <p class="heading">NEWS 📢</p> Arduino <span class="simple">Simple<span class="foc">FOC</span>library</span> now supports magnetic sensors using I2C communication! Check out the library <a href="sensors">docs</a>  to see how to use them with your project. You can also find full configuration in the library examples. <br>
-<p class="heading">BEWARE 📢</p> The <code class="highlighter-rouge">MagneticSensor</code> class has been renamed and divided to <code class="highlighter-rouge">MagneticSensorSPI</code> and <code class="highlighter-rouge">MagneticSensorI2C</code> classes.
+<blockquote class="info"> <p class="heading">NEWS 📢</p> New version of the Arduino <span class="simple">Simple<span class="foc">FOC</span>library</span> is out! (<a href="https://github.com/askuric/Arduino-FOC/releases">version 1.5.0 <i class="fa fa-tag"></i></a>)
+<br>
+<b>New features</b>:
+<ul>
+  <li> Open-loop motor control</li>
+  <li> Support Hall sensors</li>
+  <li> Support for Analog interface Magnetic sensor</li>
+  <li> New alignment procedure <br>- automatic sensor direction detection<br> - possibility to avoid alignment completely</li>
+  <li> PI controller updated to PID controller</li>
+  <li>...</li>
+</ul>
+Big thanks to <a href="https://github.com/owennewo">@owennewo</a> for awesome suggestions and pull-requests!
 </blockquote>
 
 ## Arduino <span class="simple">Simple<span class="foc">FOC</span>Shield</span>

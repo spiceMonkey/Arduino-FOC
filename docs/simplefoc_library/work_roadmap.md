@@ -8,13 +8,13 @@ permalink: /roadmap
 
 #  Roadmap
 
-For more info about the features of library releases visit the [github releases <i class="fa fa-tag"></i>](https://github.com/askuric/Arduino-FOC/releases).
+For more info about the features of library releases visit the [github releases <i class="fa fa-tag"></i>](https://github.com/simplefoc/Arduino-FOC/releases).
 
 ## Motion Control and FOC algorithm
 - [ ] Motor control: Support for current control
-- [ ] Motor control: Support for Hall sensor commutation 
-- [ ] Motor control: Support for fully open-loop operation (no sensor)
 - [ ] Motor control: FOC using IMU - camera gimbal and similar applications
+- [x] Motor control: Support for Hall sensor commutation 
+- [x] Motor control: Support for fully open-loop operation (no sensor)
 - [x] Add support for acceleration ramping
 - [x] Velocity Low pass filter
 - [x] Timer interrupt execution rather than in the `loop()`: ❌ No real performance improvement
@@ -23,7 +23,7 @@ For more info about the features of library releases visit the [github releases 
 - [x] Implement Space Vector Modulation method : PWM SVM
 
 ## MCU support
-- [ ] Device specific code separation: Easier porting in between devices
+- [x] Device specific code separation: Easier porting in between devices
 - [x] ESP32 support
 - [x] Device specific: STM32 Nucleo support
 - [x] Device specific: STM32 BLuepill support
@@ -34,12 +34,13 @@ For more info about the features of library releases visit the [github releases 
 
 ## Sensor support
 - [ ] IMU as position sensor
-- [ ] Hall sensor support
 - [ ] Make support for magnetic encoder  SSI
 - [ ] Make support for magnetic encoder  PWM
+- [x] Make support for magnetic encoder  Analog
 - [x] Make support for magnetic encoder  I2C
 - [x] Make support for magnetic encoder  ABI
 - [x] Make support for magnetic encoder  SPI
+- [x] Hall sensor support
 - [x] Encoder index proper implementation
 
 ## User interaction
@@ -47,7 +48,8 @@ For more info about the features of library releases visit the [github releases 
 - [x] Support monitoring 
 
 ## Usability 
-- [ ] <span class="simple">Simple<span class="foc">FOC</span>Shield</span> getting started page
+- [ ] <span class="simple">Simple<span class="foc">FOC</span>library</span> getting started page
+- [x] <span class="simple">Simple<span class="foc">FOC</span>Shield</span> getting started page
 - [x] Make the library accessible in the Arduino Library Manager 
 - [x] Make minimal version of the arduino code - all in one arduino file
 - [x] Documentation separation from README

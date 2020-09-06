@@ -46,8 +46,9 @@ encoder.pullup = Pullup::INTERN;
 ## Step 3. Encoder interrupt setup
 There are two ways you can run encoders with Simple FOC library.
 - Using [hardware external interrupt](#hardware-external-interrupt) 
-   - Arduino UNO pins  `2` and `3`
+   - Arduino UNO(Atmega328) pins `2` and `3`
    - STM32 boards any pin
+   - ESP32 any pin
 - Using [software pin change interrupt](#software-pin-change-interrupt) by using a library such as [PciManager library](https://github.com/prampec/arduino-pcimanager)
    - Only for Arduino devices (Atmga328 and Atmage2560)
 
@@ -69,7 +70,7 @@ And provide those functions to the encoder interrupt init function `encoder.enab
 // enable encoder hardware interrupts
 encoder.enableInterrupts(doA, doB)
 ```
-You can name the buffering functions as you wish. It is just important to provide them to the `encoder.init()` function. This procedure is a tradeoff in between scalability and simplicity. This allows you to have more than one encoder connected to the same arduino. All you need to do is to instantiate new `Encoder` class and create new buffer functions. For example:
+You can name the buffering functions as you wish. It is just important to provide them to the `encoder.enableInterrupts()` function. This procedure is a tradeoff in between scalability and simplicity. This allows you to have more than one encoder connected to the same MCU. All you need to do is to instantiate new `Encoder` class and create new buffer functions. For example:
 ```cpp
 // encoder 1
 Encoder enc1 =  Encoder(...);

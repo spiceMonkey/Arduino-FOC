@@ -38,20 +38,25 @@ Which means that your actual velocity measurement <i>v</i> will influence the fi
 
 ## Implementation details
 
-Velocity filtering function implemented in the <span class="simple">Simple<span class="foc">FOC</span>library</span>:
+Low pass filtering function implemented in the <span class="simple">Simple<span class="foc">FOC</span>library</span>:
 ```cpp
-// shaft velocity calculation
-float BLDCMotor::shaftVelocity() {
-  float Ts = (_micros() - LPF_velocity.timestamp) * 1e-6;
+// low pass filter function
+// - input  - signal to be filtered
+// - lpf    - LPF_s structure with filter parameters 
+float BLDCMotor::lowPassFilter(float input, LPF_s& lpf){
+  unsigned long now_us = _micros();
+  float Ts = (now_us - lpf.timestamp) * 1e-6;
   // quick fix for strange cases (micros overflow)
   if(Ts <= 0 || Ts > 0.5) Ts = 1e-3; 
+
   // calculate the filtering 
-  float alpha = LPF_velocity.Tf/(LPF_velocity.Tf + Ts);
-  float vel = alpha*LPF_velocity.prev + (1-alpha)*sensor->getVelocity();
+  float alpha = lpf.Tf/(lpf.Tf + Ts);
+  float out = alpha*lpf.prev + (1-alpha)*input;
+
   // save the variables
-  LPF_velocity.prev = vel;
-  LPF_velocity.timestamp = _micros();
-  return vel;
+  lpf.prev = out;
+  lpf.timestamp = now_us;
+  return out;
 }
 ```
 The low pass filter is configured with `motor.LPF_velocity`structure:

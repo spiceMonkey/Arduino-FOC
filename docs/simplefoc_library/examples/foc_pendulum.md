@@ -63,9 +63,6 @@ Arduino UNO doesn't have enough hardware interrupt pins for two encoders therefo
 ### Motor
 - Motor phases `a`, `b` and `c` are connected directly the motor terminal connector `TB_M1`
 
-<blockquote class="info"> <p class="heading">Alignment</p>
-Motor phases <code class="highlighter-rouge">a</code>,<code class="highlighter-rouge">b</code>,<code class="highlighter-rouge">c</code> and encoder channels <code class="highlighter-rouge">A</code> and <code class="highlighter-rouge">B</code> have to have the same orientation for the algorithm to work. But don't worry about it too much. Connect it initially as you wish and then if the motor locks in place reverse phase <code class="highlighter-rouge">a</code> and <code class="highlighter-rouge">b</code> of the motor, that should be enough.
-</blockquote>
 
 
 ## Arduino code 
@@ -161,9 +158,6 @@ motor.voltage_power_supply = 12;
 Then we tell the motor which control loop to run by specifying the `motor.controller` variable.
 ```cpp
 // set control loop type to be used
-// ControlType::voltage
-// ControlType::velocity
-// ControlType::angle
 motor.controller = ControlType::voltage;
 ```
 <blockquote class="info">For more information about the voltage control loop please check the  <a href="voltage_loop">doc</a>.</blockquote>

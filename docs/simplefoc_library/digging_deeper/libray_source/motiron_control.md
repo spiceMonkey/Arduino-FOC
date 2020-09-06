@@ -139,7 +139,7 @@ And that is done by using PI controller in  `velocityPI()` function.
 ```cpp
 // velocity control loop PI controller
 float BLDCMotor::velocityPI(float tracking_error) {
-  return controllerPI(tracking_error, PI_velocity);
+  return controllerPI(tracking_error, PID_velocity);
 }
 ```
 The `BLDMotor` class has implemented generic PI controller function called `controllerPI()`.
@@ -170,7 +170,7 @@ float BLDCMotor::controllerPI(float tracking_error, PI_s& cont){
   return voltage;
 }
 ```
-The PI controller is configured with `motor.PI_velocity` structure:
+The PI controller is configured with `motor.PID_velocity` structure:
 ```cpp
 // PI controller configuration structure
 struct PI_s{
@@ -204,7 +204,7 @@ float BLDCMotor::positionP(float ek) {
   // calculate the target velocity from the position error
   float velocity_target = P_angle.P * ek;
   // constrain velocity target value
-  if (abs(velocity_target) > P_angle.velocity_limit) velocity_target = velocity_target > 0 ? P_angle.velocity_limit : -P_angle.velocity_limit;
+  if (abs(velocity_target) > velocity_limit) velocity_target = velocity_target > 0 ? velocity_limit : -velocity_limit;
   return velocity_target;
 }
 ```
