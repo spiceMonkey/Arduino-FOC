@@ -89,5 +89,6 @@ void loop() {
 #include "FOCutils.h"
 #include "AS5048a.h"
 #include "BLDCMotor.h"
+#include <Wire.h>
 
 #endif

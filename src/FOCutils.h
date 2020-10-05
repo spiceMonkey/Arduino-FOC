@@ -1,7 +1,7 @@
 #ifndef FOCUTILS_LIB_H
 #define FOCUTILS_LIB_H
 
-#include "Arduino.h"
+#include <Arduino.h>
 
 
 #if defined(ESP_H) // if esp32 boards

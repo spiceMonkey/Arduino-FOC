@@ -1,7 +1,6 @@
 #ifndef AS5048A_LIB_H
 #define AS5048A_LIB_H
 
-#include "Arduino.h"
 #include <SPI.h>
 #include "FOCutils.h"
 #include "Sensor.h"
