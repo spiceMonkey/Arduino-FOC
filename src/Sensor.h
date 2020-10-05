@@ -24,6 +24,8 @@ enum Pullup{
  */
 class Sensor{
     public:
+        /** set up the sensor */
+        virtual void init();
         /** get current angle (rad) */
         virtual float getAngle();
         /** get current angular velocity (rad/s)*/
